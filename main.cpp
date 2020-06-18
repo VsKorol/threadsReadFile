@@ -33,7 +33,7 @@ class FileFinder {
         {'!', "\\!"},
     };
     void lineHandler();
-    void openFile();
+    bool openFile();
 
 public:
     struct FullAnswer {
@@ -73,9 +73,10 @@ FileFinder::~FileFinder() {
         file_.close();
 }
 
-void FileFinder::openFile() {
+bool FileFinder::openFile() {
     file_.open(fileName_, std::ios::in);
     actualNum_ = 1;
+    
 }
 
 void FileFinder::setRegexStr(const std::string& regexStr) {
@@ -92,7 +93,8 @@ void FileFinder::setRegexStr(const std::string& regexStr) {
 
 void FileFinder::find(const std::string& regexStr) {
     setRegexStr(regexStr);
-    openFile();
+    if(!openFile())
+        return;
 
     for(int i = 0; i < maxTreadNum_; i++) {
         std::thread thr(&FileFinder::lineHandler, this);
@@ -102,6 +104,7 @@ void FileFinder::find(const std::string& regexStr) {
     for(auto& thr : threads_) {
         thr.join();
     }
+    file_.close();
     std::cout << *this;
 
 }
@@ -156,7 +159,8 @@ int main(int argc, char *argv[])
     fileName = argv[1];
     surStr = argv[2];
 
-    FileFinder ff(1, fileName);
+    int contTreads = std::thread::hardware_concurrency();
+    FileFinder ff(contTreads, fileName);
     ff.find(surStr);
 
     return 1;
