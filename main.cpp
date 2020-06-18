@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <string>
 #include <regex>
-#include <locale.h>
 
 class FileFinder {
     const std::map<char, std::string> specSimbol_ {
