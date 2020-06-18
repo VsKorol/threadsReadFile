@@ -149,12 +149,13 @@ std::ostream& operator<< (std::ostream &out, const FileFinder::FullAnswer &objec
 
 int main(int argc, char *argv[])
 {
-    std::string fileName = "testfile1.txt";
-    std::string surStr="b?? him";
-    if(argc >= 2){
-        fileName = argv[1];
-        surStr = argv[2];
+    std::string fileName;
+    std::string surStr";
+    if(argc < 2){
+        return 0;
     }
+    fileName = argv[1];
+    surStr = argv[2];
 
     FileFinder ff(1, fileName);
     ff.find(surStr);
